@@ -407,16 +407,15 @@ def df_from_json_list(obj: List[Dict[str, Any]]) -> pd.DataFrame:
 # -----------------------------------------------------------------------------
 class LLMGateway:
     def __init__(self, provider, model, temperature, api_key, live_mode=False):
+        # 1. Assign all attributes FIRST
         self.provider = provider
         self.model = model
         self.temperature = temperature
         self.api_key = api_key
-        self.live_mode = live_mode  # <--- Change this line from self.enabled = live_mode
+        self.live_mode = live_mode
         self.client = None
 
-        if self.live_mode and self.api_key:
-            self.client = None
-
+        # 2. Attempt client initialization if live mode is active
         if self.live_mode and self.api_key:
             try:
                 if self.provider == "OpenAI":
@@ -436,6 +435,9 @@ class LLMGateway:
                 st.sidebar.error(f"Failed to initialize {self.provider} client: {e}")
                 self.client = None
 
+    @property
+    def enabled(self) -> bool:
+        return self.client is not None
     def complete(self, system: str, user: str, json_mode: bool = False) -> str:
         if not self.enabled:
             raise RuntimeError("Live LLM mode is off or unavailable. Enable the toggle and provide a valid API key.")
