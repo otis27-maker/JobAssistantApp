@@ -71,9 +71,43 @@ section[data-testid="stSidebar"] { background: linear-gradient(180deg, #07111f 0
 .badge-yellow { color: var(--yellow); border-color: var(--yellow); background: rgba(255,209,102,.08); }
 .badge-red { color: var(--red); border-color: var(--red); background: rgba(255,82,99,.08); }
 .badge-cyan { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.08); }
-.stTabs [data-baseweb="tab-list"] { gap: 8px; }
-.stTabs [data-baseweb="tab"] { background: #0d1b2f; border: 1px solid var(--border); border-radius: 12px 12px 0 0; color: var(--muted); padding: 10px 16px; }
-.stTabs [aria-selected="true"] { color: var(--cyan) !important; border-bottom: 2px solid var(--cyan); }
+
+/* ── Container spacing for tabs ── */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 8px;
+    background-color: transparent;
+}
+
+/* ── Default state for all tab buttons (Rounded Box Style) ── */
+.stTabs [data-baseweb="tab"] {
+    background-color: #0d1b2f !important;
+    border: 1px solid #23405f !important;
+    border-radius: 12px !important; /* Rounded corners on all sides */
+    color: #8aa4bf !important;
+    padding: 8px 16px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease-in-out;
+}
+
+/* ── Hover state ── */
+.stTabs [data-baseweb="tab"]:hover {
+    border-color: #00d4ff !important;
+    color: #e6f1ff !important;
+}
+
+/* ── Highlighted Active/Selected Tab ── */
+.stTabs [aria-selected="true"] {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(51, 255, 153, 0.15)) !important;
+    border: 1px solid #00d4ff !important;
+    color: #00d4ff !important;
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.3) !important;
+}
+
+/* ── Removes Streamlit's default underline border ── */
+.stTabs [data-baseweb="tab-highlight-container"] {
+    display: none !important;
+}
+
 .stButton>button { background: linear-gradient(90deg, #00d4ff, #33ff99); color: #06111f; font-weight: 800; border: 0; border-radius: 12px; padding: .55rem 1rem; }
 .stDownloadButton>button { background: #10243f; color: var(--cyan); border: 1px solid var(--cyan); border-radius: 12px; }
 [data-testid="stMetricValue"] { color: var(--cyan); }
