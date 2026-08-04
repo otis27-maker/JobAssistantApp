@@ -1077,7 +1077,7 @@ with st.sidebar:
     }
 
     # Dynamically populate the model dropdown
-    selected_model = st.sidebar.selectbox(
+    model = st.sidebar.selectbox(
         "LLM model", 
         available_models[llm_provider]
     )
