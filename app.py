@@ -1031,35 +1031,35 @@ init_state()
 # Sidebar controls
 # -----------------------------------------------------------------------------
 with st.sidebar:
-   # st.markdown("### 🛡️ CTI Controls")
+    st.markdown("### 🛡️ CTI Controls")
     
- st.sidebar.subheader("🛡️ CTI Controls")
-
-# 1. Let the user choose the provider
-llm_provider = st.sidebar.selectbox(
-    "Select LLM Provider",
-    ["OpenAI", "Anthropic", "Google Gemini", "Hugging Face"]
-)
-
-# 2. Dynamically change the input label based on the provider
-api_key = st.sidebar.text_input(
-    f"Enter your {llm_provider} API Key", 
-    type="password", 
-    help=f"Your key is only stored in the session state for this {llm_provider} run."
-)
-
-# 3. Store the selected key in the session state so your agents can use it
-if api_key:
-    # Save it dynamically using the provider name
-    st.session_state["api_key"] = api_key
-    st.session_state["llm_provider"] = llm_provider
-    # Automatically enable live mode if an API key is provided
-    live_mode_toggle = st.toggle(
-        "Use Live LLM Mode", 
-        value=bool(sidebar_api_key.strip()),
-        key="live_mode_toggle", 
-        help="Enables agent communication with OpenAI models using your API key."
+     st.sidebar.subheader("🛡️ CTI Controls")
+    
+    # 1. Let the user choose the provider
+    llm_provider = st.sidebar.selectbox(
+        "Select LLM Provider",
+        ["OpenAI", "Anthropic", "Google Gemini", "Hugging Face"]
     )
+    
+    # 2. Dynamically change the input label based on the provider
+    api_key = st.sidebar.text_input(
+        f"Enter your {llm_provider} API Key", 
+        type="password", 
+        help=f"Your key is only stored in the session state for this {llm_provider} run."
+    )
+    
+    # 3. Store the selected key in the session state so your agents can use it
+    if api_key:
+        # Save it dynamically using the provider name
+        st.session_state["api_key"] = api_key
+        st.session_state["llm_provider"] = llm_provider
+        # Automatically enable live mode if an API key is provided
+        live_mode_toggle = st.toggle(
+            "Use Live LLM Mode", 
+            value=bool(sidebar_api_key.strip()),
+            key="live_mode_toggle", 
+            help="Enables agent communication with OpenAI models using your API key."
+        )
 
     if not sidebar_api_key.strip() and live_mode_toggle:
         st.warning("⚠️ Please input a valid OpenAI API key above to enable Live Mode.")
