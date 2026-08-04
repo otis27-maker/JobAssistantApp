@@ -74,36 +74,42 @@ section[data-testid="stSidebar"] { background: linear-gradient(180deg, #07111f 0
 
 /* ── Container spacing for tabs ── */
 .stTabs [data-baseweb="tab-list"] {
-    gap: 8px;
+    gap: 6px;
     background-color: transparent;
+    border-bottom: 2px solid #23405f; /* Base line under the tab bar */
+    padding-bottom: 0px;
 }
 
-/* ── Default state for all tab buttons (Rounded Box Style) ── */
+/* ── Tabbed Shape (Default/Unselected State) ── */
 .stTabs [data-baseweb="tab"] {
     background-color: #0d1b2f !important;
     border: 1px solid #23405f !important;
-    border-radius: 12px !important; /* Rounded corners on all sides */
+    border-bottom: none !important; /* Open at the bottom to attach to base line */
+    border-radius: 10px 10px 0px 0px !important; /* Rounded top-left & top-right corners */
     color: #8aa4bf !important;
-    padding: 8px 16px !important;
+    padding: 10px 18px !important;
     font-weight: 600 !important;
+    margin-bottom: -2px !important; /* Sits directly on top of the bottom border */
     transition: all 0.2s ease-in-out;
 }
 
-/* ── Hover state ── */
+/* ── Hover State for Unselected Tabs ── */
 .stTabs [data-baseweb="tab"]:hover {
+    background-color: #12243d !important;
     border-color: #00d4ff !important;
     color: #e6f1ff !important;
 }
 
-/* ── Highlighted Active/Selected Tab ── */
+/* ── Active / Selected Tab Shape & Highlight ── */
 .stTabs [aria-selected="true"] {
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(51, 255, 153, 0.15)) !important;
+    background: linear-gradient(180deg, #122d4a 0%, #0d1b2f 100%) !important;
     border: 1px solid #00d4ff !important;
+    border-bottom: 2px solid #0d1b2f !important; /* Blends seamlessly into the container background */
     color: #00d4ff !important;
-    box-shadow: 0 0 12px rgba(0, 212, 255, 0.3) !important;
+    box-shadow: 0 -4px 12px rgba(0, 212, 255, 0.2) !important;
 }
 
-/* ── Removes Streamlit's default underline border ── */
+/* ── Hide Streamlit's default red/blue underline bar ── */
 .stTabs [data-baseweb="tab-highlight-container"] {
     display: none !important;
 }
