@@ -1062,8 +1062,8 @@ with st.sidebar:
             help="Enables agent communication with OpenAI models using your API key."
         )
 
-    if not api_key.strip() and live_mode_toggle:
-        st.warning("⚠️ Please input a valid OpenAI API key above to enable Live Mode.")
+        if not api_key.strip() and live_mode_toggle:
+            st.warning("⚠️ Please input a valid OpenAI API key above to enable Live Mode.")
 
     model = st.text_input(
         "LLM model", 
