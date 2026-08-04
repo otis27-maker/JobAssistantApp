@@ -992,63 +992,45 @@ init_state()
 # -----------------------------------------------------------------------------
 with st.sidebar:
     st.markdown("### 🛡️ CTI Controls")
-
-    # Sticky live-mode preference within the current Streamlit session.
-    # Note: st.session_state persists across reruns while the browser session is open.
-    if "live_mode_toggle" not in st.session_state:
-        st.session_state.live_mode_toggle = False
-
-    live_mode_toggle = st.toggle(
-        "Use Live LLM Mode",
-        key="live_mode_toggle",
-        help=(
-            "Live Mode sends agent prompts to the configured OpenAI model for richer resume analysis, "
-            "job matching, cover-letter generation, critique, and LLM-judge scoring. "
-            "When this is off, the app uses local deterministic fallback logic only. "
-            "Only turn this on if you have a valid API key and are comfortable sending the uploaded resume/job text to the model provider."
-        ),
+    
+    # Text input explicitly prompting the user for their OpenAI API Key
+    sidebar_api_key = st.text_input(
+        "Enter your OpenAI API Key", 
+        type="password", 
+        placeholder="sk-...", 
+        help="Enter your personal OpenAI API key to enable Live LLM features."
     )
-    if live_mode_toggle:
-        st.caption(
-            "Live Mode is ON: agents may call the selected LLM. Review privacy requirements before uploading sensitive resumes."
-        )
-    else:
-        st.caption(
-            "Live Mode is OFF: the app uses local fallback heuristics and does not call an external LLM."
-        )
 
+    # Automatically enable live mode if an API key is provided
+    live_mode_toggle = st.toggle(
+        "Use Live LLM Mode", 
+        value=bool(sidebar_api_key.strip()),
+        key="live_mode_toggle", 
+        help="Enables agent communication with OpenAI models using your API key."
+    )
 
+    if not sidebar_api_key.strip() and live_mode_toggle:
+        st.warning("⚠️ Please input a valid OpenAI API key above to enable Live Mode.")
 
     model = st.text_input(
-        "LLM model",
-        value=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
-        disabled=not live_mode_toggle,
+        "LLM model", 
+        value=os.getenv("OPENAI_MODEL", "gpt-4o-mini"), 
+        disabled=not live_mode_toggle
     )
-
+    
     temp = st.slider(
-        "Generation temperature",
-        0.0,
-        1.0,
-        0.2,
-        0.05,
-        disabled=not live_mode_toggle,
+        "Generation temperature", 
+        0.0, 1.0, 0.2, 0.05, 
+        disabled=not live_mode_toggle
     )
 
-    sidebar_api_key = st.text_input(
-        "OpenAI API Key",
-        type="password",
-        placeholder="sk-...",
-        disabled=not live_mode_toggle,
-        help="Optional if OPENAI_API_KEY is already set as an environment variable or Streamlit secret.",
-    )
-
+    # Initialize gateway with the user-entered API Key
     llm = LLMGateway(
-        model=model,
-        temperature=temp,
-        api_key=sidebar_api_key,
-        live_mode=live_mode_toggle,
+        model=model, 
+        temperature=temp, 
+        api_key=sidebar_api_key.strip(), 
+        live_mode=live_mode_toggle and bool(sidebar_api_key.strip())
     )
-
     st.markdown("---")
     st.markdown("**Runtime mode**")
     if live_mode_toggle and llm.enabled:
