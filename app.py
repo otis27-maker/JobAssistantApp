@@ -1080,12 +1080,12 @@ with st.sidebar:
         disabled=not live_mode_toggle
     )
 
-    # Initialize gateway with the user-entered API Key
+        # Initialize gateway with the user-entered API Key
     llm = LLMGateway(
-        model=model, 
-        temperature=temp, 
-        api_key=sidebar_api_key.strip(), 
-        live_mode=live_mode_toggle and bool(sidebar_api_key.strip())
+        model=model,
+        temperature=temp,
+        api_key=api_key_str,
+        live_mode=live_mode_toggle and bool(api_key_str)
     )
     st.markdown("---")
     st.markdown("**Runtime mode**")
