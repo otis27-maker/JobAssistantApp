@@ -1033,7 +1033,7 @@ init_state()
 with st.sidebar:
     st.markdown("### 🛡️ CTI Controls")
     
-     st.sidebar.subheader("🛡️ CTI Controls")
+    st.sidebar.subheader("🛡️ CTI Controls")
     
     # 1. Let the user choose the provider
     llm_provider = st.sidebar.selectbox(
