@@ -1033,14 +1033,28 @@ init_state()
 with st.sidebar:
     st.markdown("### 🛡️ CTI Controls")
     
-    # Text input explicitly prompting the user for their OpenAI API Key
-    sidebar_api_key = st.text_input(
-        "Enter your OpenAI API Key", 
-        type="password", 
-        placeholder="sk-...", 
-        help="Enter your personal OpenAI API key to enable Live LLM features."
-    )
+ import streamlit as st
 
+st.sidebar.subheader("🛡️ CTI Controls")
+
+# 1. Let the user choose the provider
+llm_provider = st.sidebar.selectbox(
+    "Select LLM Provider",
+    ["OpenAI", "Anthropic", "Google Gemini", "Hugging Face"]
+)
+
+# 2. Dynamically change the input label based on the provider
+api_key = st.sidebar.text_input(
+    f"Enter your {llm_provider} API Key", 
+    type="password", 
+    help=f"Your key is only stored in the session state for this {llm_provider} run."
+)
+
+# 3. Store the selected key in the session state so your agents can use it
+if api_key:
+    # Save it dynamically using the provider name
+    st.session_state["api_key"] = api_key
+    st.session_state["llm_provider"] = llm_provider
     # Automatically enable live mode if an API key is provided
     live_mode_toggle = st.toggle(
         "Use Live LLM Mode", 
