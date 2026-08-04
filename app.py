@@ -415,17 +415,26 @@ class LLMGateway:
         self.client = None
 
         if self.live_mode and self.api_key:
-            if self.provider == "OpenAI":
-                pass
-            elif self.provider == "Anthropic":
-                pass
-            elif self.provider == "Google Gemini":
-                pass
-            elif self.provider == "Hugging Face":
-                pass
-    @property
-    def enabled(self) -> bool:
-        return self.live_mode and self.client is not None
+            self.client = None
+
+        if self.live_mode and self.api_key:
+            try:
+                if self.provider == "OpenAI":
+                    from openai import OpenAI
+                    self.client = OpenAI(api_key=self.api_key)
+                elif self.provider == "Anthropic":
+                    import anthropic
+                    self.client = anthropic.Anthropic(api_key=self.api_key)
+                elif self.provider == "Google Gemini":
+                    import google.generativeai as genai
+                    genai.configure(api_key=self.api_key)
+                    self.client = genai.GenerativeModel(self.model)
+                elif self.provider == "Hugging Face":
+                    from huggingface_hub import InferenceClient
+                    self.client = InferenceClient(api_key=self.api_key)
+            except Exception as e:
+                st.sidebar.error(f"Failed to initialize {self.provider} client: {e}")
+                self.client = None
 
     def complete(self, system: str, user: str, json_mode: bool = False) -> str:
         if not self.enabled:
