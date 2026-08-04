@@ -406,29 +406,26 @@ def df_from_json_list(obj: List[Dict[str, Any]]) -> pd.DataFrame:
 # LLM Gateway
 # -----------------------------------------------------------------------------
 class LLMGateway:
-    def __init__(self, model: str, temperature: float = 0.2, api_key: str = "", live_mode: bool = False):
+    def __init__(self, provider, model, temperature, api_key, live_mode=False):
+        self.provider = provider
         self.model = model
-        self.temperature = temperature
-        self.live_mode = live_mode
-        self.api_key = ""
-        self.client: Optional[Any] = None
+        self.api_key = api_key
+        self.enabled = live_mode
+        self.client = None
 
-        if not self.live_mode:
-            return
-
-        env_key = os.getenv("OPENAI_API_KEY", "").strip()
-        secrets_key = ""
-        try:
-            secrets_key = st.secrets.get("OPENAI_API_KEY", "").strip()
-        except Exception:
-            secrets_key = ""
-
-        self.api_key = (api_key or env_key or secrets_key).strip()
-        if self.api_key and OpenAI is not None:
-            try:
-                self.client = OpenAI(api_key=self.api_key)
-            except Exception:
-                self.client = None
+        if self.enabled and self.api_key:
+            if self.provider == "OpenAI":
+                # import openai / LangChain ChatOpenAI
+                pass
+            elif self.provider == "Anthropic":
+                # import anthropic / LangChain ChatAnthropic
+                pass
+            elif self.provider == "Google Gemini":
+                # import google.generativeai / LangChain ChatGoogleGenerativeAI
+                pass
+            elif self.provider == "Hugging Face":
+                # initialize Hugging Face hub / client
+                pass
 
     @property
     def enabled(self) -> bool:
@@ -1088,13 +1085,15 @@ with st.sidebar:
         disabled=not live_mode_toggle
     )
 
-        # Initialize gateway with the user-entered API Key
+    # Initialize gateway with provider and model parameters
     llm = LLMGateway(
+        provider=llm_provider,
         model=model,
         temperature=temp,
         api_key=api_key_str,
         live_mode=live_mode_toggle and bool(api_key_str)
     )
+
     st.markdown("---")
     st.markdown("**Runtime mode**")
     if live_mode_toggle and llm.enabled:
