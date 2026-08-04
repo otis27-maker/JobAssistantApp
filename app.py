@@ -409,24 +409,20 @@ class LLMGateway:
     def __init__(self, provider, model, temperature, api_key, live_mode=False):
         self.provider = provider
         self.model = model
+        self.temperature = temperature
         self.api_key = api_key
-        self.enabled = live_mode
+        self.live_mode = live_mode  # <--- Change this line from self.enabled = live_mode
         self.client = None
 
-        if self.enabled and self.api_key:
+        if self.live_mode and self.api_key:
             if self.provider == "OpenAI":
-                # import openai / LangChain ChatOpenAI
                 pass
             elif self.provider == "Anthropic":
-                # import anthropic / LangChain ChatAnthropic
                 pass
             elif self.provider == "Google Gemini":
-                # import google.generativeai / LangChain ChatGoogleGenerativeAI
                 pass
             elif self.provider == "Hugging Face":
-                # initialize Hugging Face hub / client
                 pass
-
     @property
     def enabled(self) -> bool:
         return self.live_mode and self.client is not None
