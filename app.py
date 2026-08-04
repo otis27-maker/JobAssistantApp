@@ -1031,11 +1031,9 @@ init_state()
 # Sidebar controls
 # -----------------------------------------------------------------------------
 with st.sidebar:
-    st.markdown("### 🛡️ CTI Controls")
+   # st.markdown("### 🛡️ CTI Controls")
     
- import streamlit as st
-
-st.sidebar.subheader("🛡️ CTI Controls")
+ st.sidebar.subheader("🛡️ CTI Controls")
 
 # 1. Let the user choose the provider
 llm_provider = st.sidebar.selectbox(
