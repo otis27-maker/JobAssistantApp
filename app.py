@@ -1053,10 +1053,11 @@ with st.sidebar:
         # Save it dynamically using the provider name
         st.session_state["api_key"] = api_key
         st.session_state["llm_provider"] = llm_provider
+
         # Automatically enable live mode if an API key is provided
         live_mode_toggle = st.toggle(
             "Use Live LLM Mode", 
-            value=bool(sidebar_api_key.strip()),
+            value=bool(api_key.strip()),
             key="live_mode_toggle", 
             help="Enables agent communication with OpenAI models using your API key."
         )
