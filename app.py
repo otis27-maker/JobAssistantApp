@@ -1541,45 +1541,53 @@ with tabs[6]:
     c1, c2 = st.columns(2)
     with c1:
         st.markdown("""
-#### Quick Start
-1. **Upload or paste a résumé** in PDF, DOCX, or TXT format.
-2. Optionally **upload or paste a target job description** for exact role alignment.
-3. Click **Extract and Sanitize Inputs** and watch the progress bar complete.
-4. Go to **Resumé 
-** and run the analyzer.
-5. Go to **Job Matcher**, select a matched role, then generate the package.
-6. Review **Critic & LLM Judge** scores before using the letter.
+        #### Quick Start
+        1. **Configure API Settings** (Sidebar):
+           - Enter your personal **OpenAI API Key** in the sidebar.
+           - Toggle **Use Live LLM Mode** ON to enable agent communications with OpenAI models (e.g., `gpt-4o-mini`).
+           - *(Optional)* Click **Test Live LLM Connection** to verify your API key works.
+        2. **Upload or paste a résumé** in PDF, DOCX, or TXT format.
+        3. Optionally **upload or paste a target job description** for exact role alignment.
+        4. Click **Extract and Sanitize Inputs** and watch the progress bar complete.
+        5. Go to **Resumé Analyzer** and run the analyzer.
+        6. Go to **Job Matcher**, select a matched role, then generate the package.
+        7. Review **Critic & LLM Judge** scores before using the letter.
 
-#### Resume Version Control
-- Every extraction creates a new in-session résumé snapshot.
-- Use **Load Selected Version** to compare alternate résumé drafts.
-- Analyzer results are saved back to the active version after analysis.
-- Export the version history JSON if you want a portable audit trail.
-""")
+        #### Resume Version Control
+        - Every extraction creates a new in-session résumé snapshot.
+        - Use **Load Selected Version** to compare alternate résumé drafts.
+        - Analyzer results are saved back to the active version after analysis.
+        - Export the version history JSON if you want a portable audit trail.
+        """)
+
     with c2:
         st.markdown("""
-#### Best Results
-- Use a clean résumé with clear **Skills**, **Projects**, **Experience**, and **Education** sections.
-- Add honest metrics such as ticket volume, project counts, or measurable outcomes.
-- Paste the exact job description when possible; it improves alignment and judge scoring.
-- If the app triggers **low skill overlap**, choose a better-fit job or revise the résumé honestly.
+        #### Live LLM Mode vs. Local Fallback
+        - **Live LLM Mode (ON):** Sends agent prompts to OpenAI for enhanced resume extraction, tailored cover letters, detailed critique, and objective LLM-judge scoring.
+        - **Local Fallback Mode (OFF):** Runs entirely locally using deterministic heuristic logic without sending data to external APIs.
 
-#### Safety Notes
-- The app strips XML/HTML-like tags and flags prompt-injection signatures.
-- It scrubs common PII from the analyzer context and avoids demographic-based matching.
-- The cover letter generator is instructed not to invent degrees, certifications, metrics, or experience.
-- Final outputs should always be manually reviewed before submission.
-""")
+        #### Best Results
+        - Use a clean résumé with clear **Skills**, **Projects**, **Experience**, and **Education** sections.
+        - Add honest metrics such as ticket volume, project counts, or measurable outcomes.
+        - Paste the exact job description when possible; it improves alignment and judge scoring.
+        - If the app triggers **low skill overlap**, choose a better-fit job or revise the résumé honestly.
+
+        #### Safety Notes
+        - The app strips XML/HTML-like tags and flags prompt-injection signatures.
+        - It scrubs common PII from the analyzer context and avoids demographic-based matching.
+        - The cover letter generator is instructed not to invent degrees, certifications, metrics, or experience.
+        - Final outputs should always be manually reviewed before submission.
+        """)
 
     st.markdown("#### Troubleshooting")
     st.dataframe(pd.DataFrame([
+        {"Issue": "LLM mode not enabled or key error", "Fix": "Enter a valid OpenAI API key in the sidebar and ensure 'Use Live LLM Mode' is toggled ON."},
+        {"Issue": "Connection test fails", "Fix": "Check that your API key is active, has sufficient OpenAI credits, and has access to the specified model."},
         {"Issue": "PDF text looks incomplete", "Fix": "Use a text-based PDF or paste the resume text manually. Scanned PDFs may need OCR first."},
         {"Issue": "DOC file will not upload", "Fix": "Save legacy .doc files as .docx or PDF before uploading."},
-        {"Issue": "LLM mode not enabled", "Fix": "Install openai and set OPENAI_API_KEY. The app still works in local fallback mode."},
         {"Issue": "Low judge score", "Fix": "Paste a more detailed job description and add truthful role-specific skills or projects to the resume."},
         {"Issue": "Too many revisions", "Fix": "Use the critic feedback to improve the resume/job fit, then create a new resume version."},
     ]), use_container_width=True, hide_index=True)
-
 st.divider()
 st.caption("Built as a single-file Streamlit app for the Agentic AI project: multi-agent workflow | front-end | evaluation | risk matrix | pilot-style HHH judging.")
 st.divider()
