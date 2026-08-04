@@ -1031,7 +1031,7 @@ init_state()
 # Sidebar controls
 # -----------------------------------------------------------------------------
 with st.sidebar:
-   # st.markdown("### 🛡️ CTI Controls")
+    st.markdown("### 🛡️ CTI Controls")
     
     st.sidebar.subheader("🛡️ CTI Controls")
     
@@ -1061,10 +1061,7 @@ with st.sidebar:
             help="Enables agent communication with OpenAI models using your API key."
         )
 
-    # Fetch the key, defaulting to an empty string if it doesn't exist yet
-    current_api_key = st.session_state.get("api_key", "")
-
-    if not current_api_key.strip() and live_mode_toggle:
+    if not api_key.strip() and live_mode_toggle:
         st.warning("⚠️ Please input a valid OpenAI API key above to enable Live Mode.")
 
     model = st.text_input(
