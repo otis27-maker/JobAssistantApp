@@ -1031,7 +1031,7 @@ init_state()
 # Sidebar controls
 # -----------------------------------------------------------------------------
 with st.sidebar:
-    st.markdown("### 🛡️ CTI Controls")
+   # st.markdown("### 🛡️ CTI Controls")
     
     st.sidebar.subheader("🛡️ CTI Controls")
     
