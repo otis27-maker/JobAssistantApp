@@ -438,7 +438,7 @@ class LLMGateway:
     @property
     def enabled(self) -> bool:
         return self.client is not None
-    def complete(self, user: str, system: str = "") -> str:
+    def complete(self, user: str, system: str = "", json_mode: bool = False, **kwargs) -> str:
         """Generates text completion based on the selected LLM provider."""
         if not self.enabled or not self.client:
             return "Fallback local mode: Live LLM is disabled or unconfigured."
@@ -446,17 +446,22 @@ class LLMGateway:
         try:
             # 1. OpenAI Execution
             if self.provider == "OpenAI":
+                kwargs_dict = {}
+                if json_mode:
+                    kwargs_dict["response_format"] = {"type": "json_object"}
+
                 response = self.client.chat.completions.create(
                     model=self.model,
                     temperature=self.temperature,
                     messages=[
                         {"role": "system", "content": system},
                         {"role": "user", "content": user}
-                    ]
+                    ],
+                    **kwargs_dict
                 )
                 return response.choices[0].message.content
 
-            # 2. Anthropic Execution (STEP 3 CODE GOES HERE)
+            # 2. Anthropic Execution
             elif self.provider == "Anthropic":
                 response = self.client.messages.create(
                     model=self.model,
