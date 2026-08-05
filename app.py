@@ -1220,11 +1220,11 @@ st.divider()
 # Main tabs
 # -----------------------------------------------------------------------------
 tabs = st.tabs([
-    "**Upload & Extract**",
-    "**Resumé Analyzer**",
-    "**Job Matcher**",
-    "**Generate Package**",
-    "**Critic & LLM Judge**",
+    "**📂 Upload & Extract**",
+    "**🔍 Resumé Analyzer**",
+    "**🤝 Job Matcher**",
+    "**📦Generate Package**",
+    "**⚖️Critic & LLM Judge**",
     "**Evaluation / Risk Dashboard**",
     "**Help / Usage Tips**",
 ])
