@@ -438,25 +438,52 @@ class LLMGateway:
     @property
     def enabled(self) -> bool:
         return self.client is not None
-    def complete(self, system: str, user: str, json_mode: bool = False) -> str:
-        if not self.enabled:
-            raise RuntimeError("Live LLM mode is off or unavailable. Enable the toggle and provide a valid API key.")
-        client = self.client
-        if client is None:
-            raise RuntimeError("Live LLM client is not available.")
-        kwargs = {
-            "model": self.model,
-            "temperature": self.temperature,
-            "messages": [
-                {"role": "system", "content": system},
-                {"role": "user", "content": user},
-            ],
-        }
-        if json_mode:
-            kwargs["response_format"] = {"type": "json_object"}
-        response = client.chat.completions.create(**kwargs)
-        return response.choices[0].message.content or ""
+    def complete(self, user: str, system: str = "") -> str:
+        """Generates text completion based on the selected LLM provider."""
+        if not self.enabled or not self.client:
+            return "Fallback local mode: Live LLM is disabled or unconfigured."
 
+        try:
+            # 1. OpenAI Execution
+            if self.provider == "OpenAI":
+                response = self.client.chat.completions.create(
+                    model=self.model,
+                    temperature=self.temperature,
+                    messages=[
+                        {"role": "system", "content": system},
+                        {"role": "user", "content": user}
+                    ]
+                )
+                return response.choices[0].message.content
+
+            # 2. Anthropic Execution (STEP 3 CODE GOES HERE)
+            elif self.provider == "Anthropic":
+                response = self.client.messages.create(
+                    model=self.model,
+                    max_tokens=1024,
+                    temperature=self.temperature,
+                    system=system,
+                    messages=[{"role": "user", "content": user}]
+                )
+                return response.content[0].text
+
+            # 3. Google Gemini Execution
+            elif self.provider == "Google Gemini":
+                prompt = f"{system}\n\n{user}" if system else user
+                response = self.client.generate_content(prompt)
+                return response.text
+
+            # 4. Hugging Face Execution
+            elif self.provider == "Hugging Face":
+                response = self.client.text_generation(
+                    f"{system}\n\n{user}",
+                    max_new_tokens=1024,
+                    temperature=self.temperature
+                )
+                return response
+
+        except Exception as e:
+            return f"Error executing {self.provider} model call: {str(e)}"
 
 # -----------------------------------------------------------------------------
 # Agents
