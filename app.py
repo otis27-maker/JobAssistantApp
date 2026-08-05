@@ -1104,24 +1104,39 @@ with st.sidebar:
     if not api_key_str and live_mode_toggle:
         st.warning("⚠️ Please input a valid API key above to enable Live Mode.")
 
-   # Dictionary of available models per provider
+ # 1. Start with a safe fallback list in case the API key isn't entered yet
+    anthropic_models = [
+        "claude-3-5-sonnet-20241022",
+        "claude-3-5-sonnet-20240620",
+        "claude-3-haiku-20240307"
+    ]
+
+    # 2. YOUR DYNAMIC CODE: Fetch models if the user has provided a key
+    if llm_provider == "Anthropic" and api_key_str:
+        try:
+            from anthropic import Anthropic
+            anthropic_client = Anthropic(api_key=api_key_str)
+            
+            # Fetch dynamic list directly from the API
+            fetched_models = [m.id for m in anthropic_client.models.list()]
+            if fetched_models:
+                anthropic_models = fetched_models
+        except Exception:
+            pass # Silently fallback to the hardcoded list if the key is invalid
+
+    # 3. Dictionary of available models per provider
     available_models = {
         "OpenAI": ["gpt-4o-mini", "gpt-4o"],
-        "Anthropic": [
-            "claude-3-5-sonnet-latest",
-            "claude-3-7-sonnet-latest",
-            "claude-3-haiku-20240307"
-        ],
+        "Anthropic": anthropic_models,
         "Google Gemini": ["gemini-1.5-flash", "gemini-1.5-pro"],
         "Hugging Face": ["meta-llama/Meta-Llama-3-8B-Instruct"]
     }
 
-    # Dynamically populate the model dropdown
+    # 4. Dynamically populate the model dropdown
     model = st.sidebar.selectbox(
         "LLM model", 
         available_models[llm_provider]
-    )
-    
+    )    
     temp = st.slider(
         "Generation temperature", 
         0.0, 1.0, 0.2, 0.05, 
