@@ -9,6 +9,9 @@ from dataclasses import dataclass, field, asdict
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple, cast
 
+import streamlit as st
+from streamlit_option_menu import option_menu
+
 import pandas as pd
 import streamlit as st
 from datetime import datetime
@@ -72,47 +75,40 @@ section[data-testid="stSidebar"] { background: linear-gradient(180deg, #07111f 0
 .badge-red { color: var(--red); border-color: var(--red); background: rgba(255,82,99,.08); }
 .badge-cyan { color: var(--cyan); border-color: var(--cyan); background: rgba(0,212,255,.08); }
 
-/* ── Container spacing for tabs ── */
-.stTabs [data-baseweb="tab-list"] {
-    gap: 6px;
-    background-color: transparent;
-    border-bottom: 2px solid #23405f; /* Base line under the tab bar */
-    padding-bottom: 0px;
-}
 
-/* ── Tabbed Shape (Default/Unselected State) ── */
-.stTabs [data-baseweb="tab"] {
-    background-color: #0d1b2f !important;
-    border: 1px solid #23405f !important;
-    border-bottom: none !important; /* Open at the bottom to attach to base line */
-    border-radius: 10px 10px 0px 0px !important; /* Rounded top-left & top-right corners */
-    color: #8aa4bf !important;
-    padding: 10px 18px !important;
-    font-weight: 600 !important;
-    margin-bottom: -2px !important; /* Sits directly on top of the bottom border */
-    transition: all 0.2s ease-in-out;
-}
+# Create the smooth horizontal menu
+selected_tab = option_menu(
+    menu_title=None,  # Set to None to hide the title
+    options=["Upload", "Analyzer", "Matcher", "Package", "Critic"],
+    icons=["cloud-upload", "search", "briefcase", "box", "clipboard-check"], # Bootstrap icon names
+    default_index=0,
+    orientation="horizontal",
+    styles={
+        "container": {"padding": "0!important", "background-color": "transparent"},
+        "icon": {"color": "#4da6ff", "font-size": "18px"}, 
+        "nav-link": {
+            "font-size": "14px", 
+            "text-align": "center", 
+            "margin": "0px", 
+            "--hover-color": "#333333" # Hover background color
+        },
+        "nav-link-selected": {"background-color": "#1f77b4"}, # Active tab color
+    }
+)
 
-/* ── Hover State for Unselected Tabs ── */
-.stTabs [data-baseweb="tab"]:hover {
-    background-color: #12243d !important;
-    border-color: #00d4ff !important;
-    color: #e6f1ff !important;
-}
+# Route the logic based on the selected tab
+if selected_tab == "Upload":
+    st.header("Upload & Extract")
+    # Your upload code here
 
-/* ── Active / Selected Tab Shape & Highlight ── */
-.stTabs [aria-selected="true"] {
-    background: linear-gradient(180deg, #122d4a 0%, #0d1b2f 100%) !important;
-    border: 1px solid #00d4ff !important;
-    border-bottom: 2px solid #0d1b2f !important; /* Blends seamlessly into the container background */
-    color: #00d4ff !important;
-    box-shadow: 0 -4px 12px rgba(0, 212, 255, 0.2) !important;
-}
+elif selected_tab == "Analyzer":
+    st.header("Resumé Analyzer")
+    # Your analyzer code here
 
-/* ── Hide Streamlit's default red/blue underline bar ── */
-.stTabs [data-baseweb="tab-highlight-container"] {
-    display: none !important;
-}
+elif selected_tab == "Matcher":
+    st.header("Job Matcher")
+    # Your matcher code here
+
 
 .stButton>button { background: linear-gradient(90deg, #00d4ff, #33ff99); color: #06111f; font-weight: 800; border: 0; border-radius: 12px; padding: .55rem 1rem; }
 .stDownloadButton>button { background: #10243f; color: var(--cyan); border: 1px solid var(--cyan); border-radius: 12px; }
