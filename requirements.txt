@@ -7,3 +7,4 @@ python-docx>=1.1.0
 anthropic
 google-generativeai
 huggingface-hub
+streamlit-option-menu
